@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const nodemailer = require("nodemailer");
 
 const generateToken = async (user) => {
   return jwt.sign(
