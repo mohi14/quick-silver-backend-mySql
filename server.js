@@ -1,7 +1,8 @@
 const express = require("express");
 const cors = require("cors");
+require("dotenv").config();
 const { sequelize } = require("./Models");
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8000;
 
 const app = express();
 
@@ -24,18 +25,14 @@ sequelize
 
 // routers
 
-// const productRoutes = require("./Routes/productRoutes");
-// const reviewRoutes = require("./Routes/productRoutes");
+const userRoutes = require("./Routes/User.routes");
 
-// app.use("/api/products/", productRoutes);
-// app.use("api/reviews/", reviewRoutes);
+app.use("/api/user/", userRoutes);
 
 //  testing api
 app.get("/", (req, res) => {
   res.json({ message: "hello from api" });
 });
-
-// port
 
 // server
 

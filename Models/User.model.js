@@ -4,6 +4,26 @@ module.exports = (sequelize, DataTypes) => {
   const UserValue = sequelize.define(
     "User",
     {
+      referralId: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      firstName: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      lastName: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      companyName: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      phoneNumber: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
       email: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -41,9 +61,9 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
-  UserValue.prototype.comparePassword = async function (password) {
-    return await bcryptjs.compare(password, this.password);
-  };
+  // UserValue.prototype.comparePassword = async function (password) {
+  //   return await bcryptjs.compare(password, this.password);
+  // };
 
   return UserValue;
 };
