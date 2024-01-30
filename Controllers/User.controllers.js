@@ -4,6 +4,8 @@ const {
   sendVerificationCode,
   sendResetPassEmail,
   removeSensitiveInfo,
+  sendReferCompannyEmail,
+  sendReferUserEmail,
 } = require("../utils/auth");
 const bcryptjs = require("bcryptjs");
 const randomstring = require("randomstring");
@@ -271,6 +273,66 @@ const updateUserInfo = async (req, res) => {
   }
 };
 
+const referNewCompany = async (req, res) => {
+  try {
+    const isExist = await User.findOne({ where: { email: req.body.email } });
+
+    if (isExist) {
+      return res.status(401).send({
+        message: "This email already taken!",
+        success: false,
+      });
+    } else {
+      const result = await sendReferCompannyEmail({
+        firstName: req.user.firstName,
+        lastName: req.user.lastName,
+        userId: req.user.id,
+        email: req.body.email,
+      });
+      return res.status(200).json({
+        message: "Reffered a company successfully!",
+        success: true,
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+const referNewUser = async (req, res) => {
+  try {
+    const isExist = await User.findOne({ where: { email: req.body.email } });
+
+    if (isExist) {
+      return res.status(401).send({
+        message: "This email already taken!",
+        success: false,
+      });
+    } else {
+      const result = await sendReferUserEmail({
+        firstName: req.user.firstName,
+        lastName: req.user.lastName,
+        userId: req.user.id,
+        email: req.body.email,
+        role: req.body.role,
+      });
+      return res.status(200).json({
+        message: "Reffered a user successfully!",
+        success: true,
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 // const getAllUser = async (req, res) => {
 //   const users = await Login.findAll({});
 //   res.status(200).send(users);
@@ -286,4 +348,6 @@ module.exports = {
   changePassword,
   sendPasswordChangeLink,
   updateUserInfo,
+  referNewCompany,
+  referNewUser,
 };

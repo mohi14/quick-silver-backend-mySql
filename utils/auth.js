@@ -132,6 +132,69 @@ const sendResetPassEmail = async (data) => {
     }
   });
 };
+const sendReferCompannyEmail = async (data) => {
+  const transporter = nodemailer.createTransport({
+    service: "Gmail",
+    auth: {
+      user: process.env.GMAIL_USER,
+      pass: process.env.GMAIL_PASS,
+    },
+  });
+
+  const mailOptions = {
+    from: process.env.GMAIL_USER,
+    to: data?.email,
+    subject: "Email Verification!!",
+    html: `<div>
+    <p>${data?.firstName} ${data?.lastName} Refer you!</p>
+    <p>Use this Refferal Id: ${data?.userId}</p>
+    <p style="margin: 0; font-size: 20px; font-weight: 400; padding: 0 0 50px 50px;  background-color: #F4F4F4;">
+                        <a href="${process.env.MAINWEBSITE_URL}/sign-up"
+                            style="text-decoration: none; color: white; background-color: black; padding: 10px 40px; border-radius: 50px; display: inline-block;">
+                            Create account
+                        </a>
+                    </p>
+    </div>`,
+  };
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log(error);
+    } else {
+      return true;
+    }
+  });
+};
+const sendReferUserEmail = async (data) => {
+  const transporter = nodemailer.createTransport({
+    service: "Gmail",
+    auth: {
+      user: process.env.GMAIL_USER,
+      pass: process.env.GMAIL_PASS,
+    },
+  });
+
+  const mailOptions = {
+    from: process.env.GMAIL_USER,
+    to: data?.email,
+    subject: "Email Verification!!",
+    html: `<div>
+    <p>${data?.firstName} ${data?.lastName} Refer you!</p>
+    <p style="margin: 0; font-size: 20px; font-weight: 400; padding: 0 0 50px 50px;  background-color: #F4F4F4;">
+                        <a href="${process.env.MAINWEBSITE_URL}/sign-up-user?role=${data?.role}"
+                            style="text-decoration: none; color: white; background-color: black; padding: 10px 40px; border-radius: 50px; display: inline-block;">
+                            Create account
+                        </a>
+                    </p>
+    </div>`,
+  };
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log(error);
+    } else {
+      return true;
+    }
+  });
+};
 
 const removeSensitiveInfo = (user) => {
   const { password, updatedAt, createdAt, otp, ...userWithoutSensitiveInfo } =
@@ -144,4 +207,6 @@ module.exports = {
   sendVerificationCode,
   sendResetPassEmail,
   removeSensitiveInfo,
+  sendReferCompannyEmail,
+  sendReferUserEmail,
 };

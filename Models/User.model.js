@@ -9,7 +9,14 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
       },
       userRole: {
-        type: DataTypes.ENUM("user", "company"),
+        type: DataTypes.ENUM(
+          "user",
+          "company",
+          "officeAdmin",
+          "administrator",
+          "csr",
+          "fifldAdjuster"
+        ),
         allowNull: false,
         defaultValue: "user",
       },
