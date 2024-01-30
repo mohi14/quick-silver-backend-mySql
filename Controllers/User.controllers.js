@@ -3,6 +3,7 @@ const {
   generateToken,
   sendVerificationCode,
   sendResetPassEmail,
+  removeSensitiveInfo,
 } = require("../utils/auth");
 const bcryptjs = require("bcryptjs");
 const randomstring = require("randomstring");
@@ -86,7 +87,7 @@ const emailVerification = async (req, res) => {
       const token = await generateToken(user);
       return res.status(200).json({
         message: "User verified successfully",
-        user,
+        user: removeSensitiveInfo(user),
         accessToken: token,
         success: true,
       });
@@ -161,7 +162,7 @@ const loginUser = async (req, res) => {
       return res.status(200).json({
         message: "Logged in successfully",
         success: true,
-        user,
+        user: removeSensitiveInfo(user),
         accessToken,
       });
     } else {
@@ -236,6 +237,40 @@ const changePassword = async (req, res) => {
   }
 };
 
+const updateUserInfo = async (req, res) => {
+  try {
+    const { ...info } = req.body;
+
+    const user = await User.findOne({ where: { id: req.user.id } });
+
+    const image = req.file ? req.file.path : undefined;
+
+    const updateInfo = image ? { image, ...info } : info;
+
+    if (user) {
+      await user.update(updateInfo);
+
+      const updatedUser = await User.findByPk(req.user.id);
+      res.status(200).json({
+        success: true,
+        message: "User Info updated successfully",
+        data: removeSensitiveInfo(updatedUser),
+      });
+    } else {
+      res.status(201).json({
+        success: false,
+        message: "Update unsuccessful",
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 // const getAllUser = async (req, res) => {
 //   const users = await Login.findAll({});
 //   res.status(200).send(users);
@@ -250,4 +285,5 @@ module.exports = {
   reSendEmailVerificationCode,
   changePassword,
   sendPasswordChangeLink,
+  updateUserInfo,
 };

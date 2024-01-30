@@ -133,8 +133,15 @@ const sendResetPassEmail = async (data) => {
   });
 };
 
+const removeSensitiveInfo = (user) => {
+  const { password, updatedAt, createdAt, otp, ...userWithoutSensitiveInfo } =
+    user.get();
+  return userWithoutSensitiveInfo;
+};
+
 module.exports = {
   generateToken,
   sendVerificationCode,
   sendResetPassEmail,
+  removeSensitiveInfo,
 };

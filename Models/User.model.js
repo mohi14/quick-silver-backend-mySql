@@ -8,15 +8,15 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: true,
       },
-      // userRole: {
-      //   type: DataTypes.ENUM("user", "company"),
-      //   allowNull: false,
-      //   defaultValue: "user",
-      // },
-      // image: {
-      //   type: DataTypes.STRING,
-      //   allowNull: true,
-      // },
+      userRole: {
+        type: DataTypes.ENUM("user", "company"),
+        allowNull: false,
+        defaultValue: "user",
+      },
+      image: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
       firstName: {
         type: DataTypes.STRING,
         allowNull: false,
