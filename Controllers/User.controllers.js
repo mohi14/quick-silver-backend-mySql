@@ -1,5 +1,9 @@
 const db = require("../Models");
-const { generateToken, sendVerificationCode } = require("../utils/auth");
+const {
+  generateToken,
+  sendVerificationCode,
+  sendResetPassEmail,
+} = require("../utils/auth");
 const bcryptjs = require("bcryptjs");
 const randomstring = require("randomstring");
 
@@ -174,6 +178,33 @@ const loginUser = async (req, res) => {
   }
 };
 
+const sendPasswordChangeLink = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    const user = await User.findOne({ where: { email } });
+
+    if (user) {
+      const result = await sendResetPassEmail(user);
+      return res.status(200).json({
+        message: "Activation Link sent successfully!",
+        success: true,
+      });
+    } else {
+      return res.status(400).json({
+        message: "Invalid Email Address",
+        success: false,
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: error.message,
+      success: false,
+    });
+  }
+};
+
 const changePassword = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -218,4 +249,5 @@ module.exports = {
   emailVerification,
   reSendEmailVerificationCode,
   changePassword,
+  sendPasswordChangeLink,
 };
