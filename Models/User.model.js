@@ -8,6 +8,22 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: true,
       },
+      userRole: {
+        type: DataTypes.ENUM(
+          "user",
+          "company",
+          "officeAdmin",
+          "administrator",
+          "csr",
+          "fifldAdjuster"
+        ),
+        allowNull: false,
+        defaultValue: "user",
+      },
+      image: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
       firstName: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -18,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       companyName: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       phoneNumber: {
         type: DataTypes.STRING,
@@ -69,10 +85,6 @@ module.exports = (sequelize, DataTypes) => {
       },
     }
   );
-
-  // UserValue.prototype.comparePassword = async function (password) {
-  //   return await bcryptjs.compare(password, this.password);
-  // };
 
   return UserValue;
 };

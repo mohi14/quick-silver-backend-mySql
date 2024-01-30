@@ -3,6 +3,7 @@ const cors = require("cors");
 require("dotenv").config();
 const { sequelize } = require("./Models");
 const PORT = process.env.PORT || 8000;
+const path = require("path");
 
 const app = express();
 
@@ -28,6 +29,8 @@ sequelize
 const userRoutes = require("./Routes/User.routes");
 
 app.use("/api/user/", userRoutes);
+
+app.use("/api/uploads", express.static(path.join(__dirname, "/")));
 
 //  testing api
 app.get("/", (req, res) => {
