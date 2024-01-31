@@ -210,8 +210,8 @@ const sendPasswordChangeLink = async (req, res) => {
 
 const changePassword = async (req, res) => {
   try {
-    const { email, password } = req.body;
-    const user = await User.findOne({ where: { email } });
+    const { id, password } = req.body;
+    const user = await User.findOne({ where: { id } });
 
     if (user) {
       const newPassword = bcryptjs.hashSync(password);
