@@ -190,7 +190,7 @@ const sendPasswordChangeLink = async (req, res) => {
     if (user) {
       const result = await sendResetPassEmail(user);
       return res.status(200).json({
-        message: "Activation Link sent successfully!",
+        message: "Reset password Link sent successfully!",
         success: true,
       });
     } else {
