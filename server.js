@@ -27,8 +27,10 @@ sequelize
 // routers
 
 const userRoutes = require("./Routes/User.routes");
+const inspectionsRoutes = require("./Routes/Inspections.routes");
 
 app.use("/api/user/", userRoutes);
+app.use("/api/inspection",inspectionsRoutes );
 
 app.use("/api/uploads", express.static(path.join(__dirname, "/")));
 

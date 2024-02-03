@@ -65,6 +65,66 @@ const registerUser = async (req, res) => {
   }
 };
 
+const allUser = async (req, res) => {
+  try {
+    const user = await User.findOne({});
+
+    if (!user) {
+      return res.status(400).json({
+        message: "There is no User found!",
+        success: false,
+      });
+    } else {
+      
+      return res.status(200).json({
+        message: "Send All User successfully",
+        // user: removeSensitiveInfo(user),
+        user,
+        success: true,
+      });
+    }
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({
+      message: err.message,
+      success: false,
+    });
+  }
+};
+
+// get loggedin user endpoint
+const me = async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+    const user = await User.findOne({ where: { email } });
+
+    if (!user) {
+      return res.status(400).json({
+        message: "User not found!",
+        success: false,
+      });
+    } else {
+      user.isVerified = true;
+      await user.save();
+
+      const token = await generateToken(user);
+      return res.status(200).json({
+        message: "User verified successfully",
+        user: removeSensitiveInfo(user),
+        accessToken: token,
+        success: true,
+      });
+    }
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({
+      message: err.message,
+      success: false,
+    });
+  }
+};
+
+
 const emailVerification = async (req, res) => {
   try {
     const { email, otp } = req.body;
@@ -350,4 +410,5 @@ module.exports = {
   updateUserInfo,
   referNewCompany,
   referNewUser,
+  allUser, me
 };
