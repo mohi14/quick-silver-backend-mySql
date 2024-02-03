@@ -10,15 +10,14 @@ module.exports = (sequelize, DataTypes) => {
       },
       userRole: {
         type: DataTypes.ENUM(
-          "user",
-          "company",
-          "officeAdmin",
-          "administrator",
-          "csr",
-          "fifldAdjuster"
+          "ROOT",
+          "ADMINISTRATOR",
+          "OFFICE ADMIN",
+          "CSR",
+          "FIELD ADJUSTER"
         ),
         allowNull: false,
-        defaultValue: "user",
+        defaultValue: "ADMINISTRATOR",
       },
       image: {
         type: DataTypes.STRING,
@@ -74,6 +73,11 @@ module.exports = (sequelize, DataTypes) => {
             msg: "Password must be at least 6 characters long",
           },
         },
+      },
+      isDeleted: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true,
+        default: false,
       },
     },
     {

@@ -75,7 +75,6 @@ const allUser = async (req, res) => {
         success: false,
       });
     } else {
-      
       return res.status(200).json({
         message: "Send All User successfully",
         // user: removeSensitiveInfo(user),
@@ -123,7 +122,6 @@ const me = async (req, res) => {
     });
   }
 };
-
 
 const emailVerification = async (req, res) => {
   try {
@@ -362,7 +360,7 @@ const referNewCompany = async (req, res) => {
     });
   }
 };
-const referNewUser = async (req, res) => {
+const inviteNewUser = async (req, res) => {
   try {
     const isExist = await User.findOne({ where: { email: req.body.email } });
 
@@ -409,6 +407,7 @@ module.exports = {
   sendPasswordChangeLink,
   updateUserInfo,
   referNewCompany,
-  referNewUser,
-  allUser, me
+  inviteNewUser,
+  allUser,
+  me,
 };

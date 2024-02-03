@@ -29,7 +29,6 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-// db.inputValue = require("./inputModel")(sequelize, DataTypes);
 db.user = require("./User.model")(sequelize, DataTypes);
 db.inspections = require("./Inspections.model")(sequelize, DataTypes);
 db.insurance = require("./insurance.model")(sequelize, DataTypes);
@@ -37,7 +36,10 @@ db.Property = require("./Property.model")(sequelize, DataTypes);
 db.Attachments = require("./Attachments.model")(sequelize, DataTypes);
 db.Hazards = require("./Hazards.model")(sequelize, DataTypes);
 db.Outbuildings = require("./Outbuildings.model")(sequelize, DataTypes);
-
+db.PolicyHolderList = require("./PolicyHolderList.model")(sequelize, DataTypes);
+db.HazardList = require("./HazardList.model")(sequelize, DataTypes);
+db.AddOnList = require("./AddOnList.model")(sequelize, DataTypes);
+db.ListMessage = require("./ListMessage.model")(sequelize, DataTypes);
 
 db.sequelize.sync({ force: false }).then(() => {
   console.log(`Yes re-sync done!`);

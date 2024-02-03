@@ -7,7 +7,9 @@ const {
   sendPasswordChangeLink,
   updateUserInfo,
   referNewCompany,
-  referNewUser,allUser, me
+  allUser,
+  me,
+  inviteNewUser,
 } = require("../Controllers/User.controllers");
 const { upload } = require("../config/multerConfig");
 const { isAuth } = require("../utils/middleware");
@@ -19,7 +21,7 @@ router.post("/login", loginUser);
 router.post("/resendVerificationCode", reSendEmailVerificationCode);
 router.post("/resetPassword", sendPasswordChangeLink);
 router.post("/referCompany", isAuth, referNewCompany);
-router.post("/referUser", isAuth, referNewUser);
+router.post("/referUser", isAuth, inviteNewUser);
 
 // get and delete
 router.get("/all", allUser);
