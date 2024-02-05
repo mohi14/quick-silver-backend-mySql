@@ -154,7 +154,7 @@ const updateOutBuildingsData = async (req, res) => {
     const data = JSON.parse(outbuildings.OutbuildingsList);
 
     const updatedData = data?.map((i, idx) => {
-      if (idx === req.body.indexNum) {
+      if (idx === indexNum) {
         return { ...i, ...info };
       } else {
         return i;
@@ -167,7 +167,35 @@ const updateOutBuildingsData = async (req, res) => {
     return res.status(200).json({
       message: "Outbuildings updated successfully!",
       success: true,
-      data: updatedData,
+      data: outbuildings,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+const deleteOutBuildingsData = async (req, res) => {
+  try {
+    const { indexNum } = req.body;
+
+    const outbuildings = await Outbuildings.findOne({
+      where: { EntityId: req.params.entityId },
+    });
+
+    const data = JSON.parse(outbuildings.OutbuildingsList);
+
+    const updatedData = data?.filter((i, idx) => idx !== indexNum);
+
+    outbuildings.OutbuildingsList = updatedData;
+    await outbuildings.save();
+
+    return res.status(200).json({
+      message: "Outbuildings deleted successfully!",
+      success: true,
+      data: outbuildings,
     });
   } catch (error) {
     res.status(500).json({
@@ -296,4 +324,5 @@ module.exports = {
   addOutbuildings,
   getOutBuildingByEntityId,
   updateOutBuildingsData,
+  deleteOutBuildingsData,
 };

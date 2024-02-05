@@ -6,6 +6,7 @@ const {
   addOutbuildings,
   getOutBuildingByEntityId,
   updateOutBuildingsData,
+  deleteOutBuildingsData,
 } = require("../Controllers/Inspections.controllers");
 
 const { isAuth } = require("../utils/middleware");
@@ -32,5 +33,6 @@ router.get(
   getOutBuildingByEntityId
 );
 router.patch("/updateOutBuildings/:entityId", isAuth, updateOutBuildingsData);
+router.delete("/deleteOutBuildings/:entityId", isAuth, deleteOutBuildingsData);
 
 module.exports = router;
