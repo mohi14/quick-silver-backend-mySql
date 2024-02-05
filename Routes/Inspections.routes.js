@@ -5,6 +5,7 @@ const {
   updateHazards,
   addOutbuildings,
   getOutBuildingByEntityId,
+  updateOutBuildingsData,
 } = require("../Controllers/Inspections.controllers");
 
 const { isAuth } = require("../utils/middleware");
@@ -30,5 +31,6 @@ router.get(
   isAuth,
   getOutBuildingByEntityId
 );
+router.patch("/updateOutBuildings/:entityId", isAuth, updateOutBuildingsData);
 
 module.exports = router;

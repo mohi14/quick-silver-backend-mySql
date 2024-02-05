@@ -122,18 +122,52 @@ const addOutbuildings = async (req, res) => {
 
 const getOutBuildingByEntityId = async (req, res) => {
   try {
-    const outbuildings = await Outbuildings.findAll({
+    const outbuildings = await Outbuildings.findOne({
       where: { EntityId: req.params.entityId },
     });
 
-    outbuildings.forEach((outbuilding) => {
-      outbuilding.OutbuildingsList = JSON.parse(outbuilding.OutbuildingsList);
-    });
+    // outbuildings.forEach((outbuilding) => {
+    outbuildings.OutbuildingsList = JSON.parse(outbuildings.OutbuildingsList);
+    // });
 
     return res.status(200).json({
       message: "Outbuildings added successfully!",
       success: true,
       data: outbuildings,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+const updateOutBuildingsData = async (req, res) => {
+  try {
+    const { indexNum, ...info } = req.body;
+
+    const outbuildings = await Outbuildings.findOne({
+      where: { EntityId: req.params.entityId },
+    });
+
+    const data = JSON.parse(outbuildings.OutbuildingsList);
+
+    const updatedData = data?.map((i, idx) => {
+      if (idx === req.body.indexNum) {
+        return { ...i, ...info };
+      } else {
+        return i;
+      }
+    });
+
+    outbuildings.OutbuildingsList = updatedData;
+    await outbuildings.save();
+
+    return res.status(200).json({
+      message: "Outbuildings updated successfully!",
+      success: true,
+      data: updatedData,
     });
   } catch (error) {
     res.status(500).json({
@@ -261,4 +295,5 @@ module.exports = {
 
   addOutbuildings,
   getOutBuildingByEntityId,
+  updateOutBuildingsData,
 };
