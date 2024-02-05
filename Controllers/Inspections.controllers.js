@@ -6,77 +6,151 @@ const randomstring = require("randomstring");
 const insurance = db.insurance;
 const Hazards = db.Hazards;
 const Property = db.Property;
+const Outbuildings = db.Outbuildings;
 
-const addHazards = async (req,res) => {
+const addHazards = async (req, res) => {
   try {
-      const newUser = await Hazards.create({
-        ...req.body
-      });
+    const newUser = await Hazards.create({
+      ...req.body,
+    });
 
-      return res.status(200).json({
-        message:
-          "We have sent you a verification code. Please check your email!",
-        success: true,
-        newUser
-      });
-
+    return res.status(200).json({
+      message: "We have sent you a verification code. Please check your email!",
+      success: true,
+      newUser,
+    });
   } catch (error) {
     res.status(500).json({
       success: false,
       message: error.message,
     });
   }
-}
-const addInsurance = async (req,res) => {
+};
+const addInsurance = async (req, res) => {
   try {
-      const newUser = await insurance.create({
-        ...req.body
-      });
+    const newUser = await insurance.create({
+      ...req.body,
+    });
 
-      return res.status(200).json({
-        message:
-          "We have sent you a verification code. Please check your email!",
-        success: true,
-        newUser
-      });
-
+    return res.status(200).json({
+      message: "We have sent you a verification code. Please check your email!",
+      success: true,
+      newUser,
+    });
   } catch (error) {
     res.status(500).json({
       success: false,
       message: error.message,
     });
   }
-}
-const addProperty = async (req,res) => {
+};
+const addProperty = async (req, res) => {
   try {
-      const newUser = await Property.create({
-        ...req.body
-      });
+    const newUser = await Property.create({
+      ...req.body,
+    });
 
-      return res.status(200).json({
-        message:
-          "We have sent you a verification code. Please check your email!",
-        success: true,
-        newUser
-      });
-
+    return res.status(200).json({
+      message: "We have sent you a verification code. Please check your email!",
+      success: true,
+      newUser,
+    });
   } catch (error) {
     res.status(500).json({
       success: false,
       message: error.message,
     });
   }
-}
+};
 
+// ------------------------------- OutBuildings----------------------------------------//
+
+const addOutbuildings = async (req, res) => {
+  try {
+    const { EntityId, name, length, width, location } = req.body;
+
+    const outbuildings = await Outbuildings.findOne({
+      where: { EntityId: EntityId },
+    });
+
+    if (!outbuildings) {
+      const newOutBuildings = await Outbuildings.create({
+        EntityId,
+        OutbuildingsList: [
+          {
+            name,
+            length,
+            width,
+            location,
+          },
+        ],
+      });
+
+      return res.status(200).json({
+        message: "Outbuildings added successfully!",
+        data: newOutBuildings,
+        success: true,
+      });
+    }
+
+    const newOutbuildingsList = {
+      name,
+      length,
+      width,
+      location,
+    };
+
+    const data = JSON.parse(outbuildings.get().OutbuildingsList);
+    data.push(newOutbuildingsList);
+
+    outbuildings.OutbuildingsList = data;
+
+    await outbuildings.save();
+
+    return res.status(200).json({
+      message: "Outbuildings added successfully!",
+      success: true,
+      data: outbuildings,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+const getOutBuildingByEntityId = async (req, res) => {
+  try {
+    const outbuildings = await Outbuildings.findAll({
+      where: { EntityId: req.params.entityId },
+    });
+
+    outbuildings.forEach((outbuilding) => {
+      outbuilding.OutbuildingsList = JSON.parse(outbuilding.OutbuildingsList);
+    });
+
+    return res.status(200).json({
+      message: "Outbuildings added successfully!",
+      success: true,
+      data: outbuildings,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+// ------------------------------- OutBuildings----------------------------------------//
 
 // update
-const updateInspection = async (req,res) => {
+const updateInspection = async (req, res) => {
   try {
     const { ...info } = req.body;
 
     const Insurance = await insurance.findOne({ where: { id: req.id } });
-
-    
 
     const updateInfo = image ? { image, ...info } : info;
 
@@ -102,7 +176,7 @@ const updateInspection = async (req,res) => {
       message: error.message,
     });
   }
-}
+};
 
 const updateUserInfo = async (req, res) => {
   try {
@@ -185,4 +259,6 @@ module.exports = {
   // Property
   addProperty,
 
+  addOutbuildings,
+  getOutBuildingByEntityId,
 };

@@ -3,6 +3,8 @@ const {
   addHazards,
   addProperty,
   updateHazards,
+  addOutbuildings,
+  getOutBuildingByEntityId,
 } = require("../Controllers/Inspections.controllers");
 
 const { isAuth } = require("../utils/middleware");
@@ -20,5 +22,13 @@ router.patch("/:id", addProperty);
 // hazard routes
 router.post("/addHazards", addHazards);
 router.patch("/:id", updateHazards);
+
+// outbuildings routes
+router.post("/outbuilding/add", isAuth, addOutbuildings);
+router.get(
+  "/outbuildingsByEntityId/:entityId",
+  isAuth,
+  getOutBuildingByEntityId
+);
 
 module.exports = router;
