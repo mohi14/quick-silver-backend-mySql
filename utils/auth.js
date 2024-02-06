@@ -180,7 +180,7 @@ const sendReferUserEmail = async (data) => {
     html: `<div>
     <p>${data?.firstName} ${data?.lastName} Refer you!</p>
     <p style="margin: 0; font-size: 20px; font-weight: 400; padding: 0 0 50px 50px;  background-color: #F4F4F4;">
-                        <a href="${process.env.MAINWEBSITE_URL}/sign-up-user?role=${data?.role}"
+                        <a href="${process.env.MAINWEBSITE_URL}/sign-up-user?role=${data?.role}&email=${data?.email}&companyId=${data?.companyId}"
                             style="text-decoration: none; color: white; background-color: black; padding: 10px 40px; border-radius: 50px; display: inline-block;">
                             Create account
                         </a>

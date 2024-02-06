@@ -11,9 +11,21 @@ const bcryptjs = require("bcryptjs");
 const randomstring = require("randomstring");
 
 const User = db.user;
+const Company = db.Company;
 
 const registerUser = async (req, res) => {
   try {
+    const {
+      userRole,
+      firstName,
+      lastName,
+      companyName,
+      phoneNumber,
+      email,
+      referralId,
+      password,
+    } = req.body;
+
     const existingUser = await User.findOne({
       where: { email: req.body.email },
     });
@@ -44,8 +56,28 @@ const registerUser = async (req, res) => {
     } else {
       const otp = randomstring.generate({ length: 6, charset: "numeric" });
 
+      const existingCompany = await Company.findOne({
+        where: { companyName: companyName },
+      });
+
+      if (existingCompany) {
+        return res.status(403).json({
+          message: `${companyName} already taken! Try another name.`,
+          success: false,
+        });
+      }
+
+      const newCompany = await Company.create({ companyName });
+
       const newUser = await User.create({
-        ...req.body,
+        userRole,
+        firstName,
+        lastName,
+        companyId: newCompany?.id,
+        phoneNumber,
+        email,
+        referralId,
+        password,
         otp,
       });
 
@@ -94,8 +126,7 @@ const allUser = async (req, res) => {
 // get loggedin user endpoint
 const me = async (req, res) => {
   try {
-    const { email, otp } = req.body;
-    const user = await User.findOne({ where: { email } });
+    const user = await User.findByPk(req.user.id);
 
     if (!user) {
       return res.status(400).json({
@@ -103,16 +134,7 @@ const me = async (req, res) => {
         success: false,
       });
     } else {
-      user.isVerified = true;
-      await user.save();
-
-      const token = await generateToken(user);
-      return res.status(200).json({
-        message: "User verified successfully",
-        user: removeSensitiveInfo(user),
-        accessToken: token,
-        success: true,
-      });
+      return res.status(200).json(removeSensitiveInfo(user));
     }
   } catch (err) {
     console.error(err);
@@ -209,6 +231,13 @@ const loginUser = async (req, res) => {
     if (user?.isVerified === false) {
       return res.status(401).json({
         message: "Please verify your email.",
+        success: false,
+      });
+    }
+
+    if (user?.isDeleted) {
+      return res.status(401).json({
+        message: "User is diabled.",
         success: false,
       });
     }
@@ -376,6 +405,7 @@ const inviteNewUser = async (req, res) => {
         userId: req.user.id,
         email: req.body.email,
         role: req.body.role,
+        companyId: req.body.companyId,
       });
       return res.status(200).json({
         message: "Reffered a user successfully!",

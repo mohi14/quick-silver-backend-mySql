@@ -7,6 +7,7 @@ const insurance = db.insurance;
 const Hazards = db.Hazards;
 const Property = db.Property;
 const Outbuildings = db.Outbuildings;
+const Attachments = db.Attachments;
 
 const addHazards = async (req, res) => {
   try {
@@ -206,6 +207,65 @@ const deleteOutBuildingsData = async (req, res) => {
 };
 
 // ------------------------------- OutBuildings----------------------------------------//
+const addAttachments = async (req, res) => {
+  try {
+    const { EntityId, image, uploadDate, uploadedBy, attachmentType } =
+      req.body;
+
+    const attachments = await Outbuildings.findOne({
+      where: { EntityId: EntityId },
+    });
+
+    if (!attachments) {
+      const newAttachments = await Outbuildings.create({
+        EntityId,
+        OutbuildingsList: [
+          {
+            name,
+            length,
+            width,
+            location,
+          },
+        ],
+      });
+
+      return res.status(200).json({
+        message: "Outbuildings added successfully!",
+        data: newOutBuildings,
+        success: true,
+      });
+    }
+
+    const newOutbuildingsList = {
+      name,
+      length,
+      width,
+      location,
+    };
+
+    const data = JSON.parse(outbuildings.get().OutbuildingsList);
+    data.push(newOutbuildingsList);
+
+    outbuildings.OutbuildingsList = data;
+
+    await outbuildings.save();
+
+    return res.status(200).json({
+      message: "Outbuildings added successfully!",
+      success: true,
+      data: outbuildings,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+// ----------------------------------attachments--------------------------------------//
+
+// ----------------------------------attachments--------------------------------------//
 
 // update
 const updateInspection = async (req, res) => {

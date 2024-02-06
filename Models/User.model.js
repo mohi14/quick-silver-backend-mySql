@@ -8,6 +8,14 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: true,
       },
+      companyId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        // references: {
+        //   model: "companies",
+        //   key: "id",
+        // },
+      },
       userRole: {
         type: DataTypes.ENUM(
           "ROOT",
@@ -28,10 +36,6 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       lastName: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      companyName: {
         type: DataTypes.STRING,
         allowNull: false,
       },
