@@ -29,10 +29,12 @@ sequelize
 const userRoutes = require("./Routes/User.routes");
 const inspectionsRoutes = require("./Routes/Inspections.routes");
 const listRoutes = require("./Routes/Lists.routes");
+const companyRoutes = require("./Routes/Company.routes");
 
 app.use("/api/user/", userRoutes);
 app.use("/api/inspection", inspectionsRoutes);
 app.use("/api/lists", listRoutes);
+app.use("/api/company", companyRoutes);
 
 app.use("/api/uploads", express.static(path.join(__dirname, "/")));
 
