@@ -1,21 +1,24 @@
 module.exports = (sequelize, DataTypes) => {
-    const HazardsValue = sequelize.define("Hazards", {
-        LiabilitiesHazards: {
-            type: DataTypes.JSON,
-            allowNull: false
-        },
-        
-        Comments: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
+  const HazardsValue = sequelize.define("Hazards", {
+    LiabilitiesHazards: {
+      type: DataTypes.JSON,
+      allowNull: false,
+    },
 
-        CommentsResident: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        
-    });
+    Comments: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
 
-    return HazardsValue;
+    CommentsResident: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    InsurerId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+  });
+
+  return HazardsValue;
 };

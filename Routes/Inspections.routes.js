@@ -2,7 +2,6 @@ const {
   addInsurance,
   addHazards,
   addProperty,
-  updateHazards,
   addOutbuildings,
   getOutBuildingByEntityId,
   updateOutBuildingsData,
@@ -16,6 +15,8 @@ const {
   addAutomobile,
   updateAutomobile,
   getAutomobileInfo,
+  updateHazard,
+  getHazardInfo,
 } = require("../Controllers/Inspections.controllers");
 
 const { isAuth } = require("../utils/middleware");
@@ -41,7 +42,8 @@ router.patch("/updateAutomobile/:id", isAuth, updateAutomobile);
 
 // hazard routes
 router.post("/addHazards", addHazards);
-router.patch("/:id", updateHazards);
+router.get("/hazardInfo/:insuredId", isAuth, getHazardInfo);
+router.patch("/updateAutomobile/:id", updateHazard);
 
 // outbuildings routes
 router.post("/outbuilding/add", isAuth, addOutbuildings);

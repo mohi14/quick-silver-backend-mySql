@@ -11,25 +11,6 @@ const Outbuildings = db.Outbuildings;
 const Attachments = db.Attachments;
 const Automobile = db.Automobile;
 
-const addHazards = async (req, res) => {
-  try {
-    const newUser = await Hazards.create({
-      ...req.body,
-    });
-
-    return res.status(200).json({
-      message: "We have sent you a verification code. Please check your email!",
-      success: true,
-      newUser,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
-
 // --------------------------insurance-------------------//
 const addInsurance = async (req, res) => {
   try {
@@ -251,6 +232,72 @@ const getAutomobileInfo = async (req, res) => {
 };
 
 // ------------------ automobile end -------------------//
+
+// ---------------- hazards ---------------//
+const addHazards = async (req, res) => {
+  try {
+    const newHazard = await Hazards.create({
+      ...req.body,
+    });
+
+    return res.status(200).json({
+      message: "Hazard created successfully!",
+      success: true,
+      data: newHazard,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+const updateHazard = async (req, res) => {
+  try {
+    const hazards = await Hazards.findOne({
+      where: { id: req.params.id },
+    });
+
+    if (hazards) {
+      await hazards.update(req.body);
+
+      const updatedHazards = await Hazards.findByPk(req.params.id);
+      return res.status(200).json({
+        success: true,
+        message: "Hazard updated successfully",
+        data: removeSensitiveInfo(updatedHazards),
+      });
+    } else {
+      return res.status(401).json({
+        success: false,
+        message: "Update unsuccessful",
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+const getHazardInfo = async (req, res) => {
+  try {
+    const hazard = await Hazards.findOne({
+      where: { InsurerId: req.params.insuredId },
+    });
+
+    return res.status(200).json(hazard);
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+// ---------------- hazards end---------------//
 
 // ------------------------------- OutBuildings----------------------------------------//
 
@@ -521,39 +568,6 @@ const updateUserInfo = async (req, res) => {
     });
   }
 };
-const updateHazards = async (req, res) => {
-  try {
-    const { ...info } = req.body;
-
-    const user = await User.findOne({ where: { id: req.user.id } });
-
-    const image = req.file ? req.file.path : undefined;
-
-    const updateInfo = image ? { image, ...info } : info;
-
-    if (user) {
-      await user.update(updateInfo);
-
-      const updatedUser = await User.findByPk(req.user.id);
-      res.status(200).json({
-        success: true,
-        message: "User Info updated successfully",
-        data: removeSensitiveInfo(updatedUser),
-      });
-    } else {
-      res.status(201).json({
-        success: false,
-        message: "Update unsuccessful",
-      });
-    }
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
 
 module.exports = {
   updateUserInfo,
@@ -568,7 +582,8 @@ module.exports = {
 
   // Hazards
   addHazards,
-  updateHazards,
+  updateHazard,
+  getHazardInfo,
 
   // Property
   addProperty,
