@@ -1,4 +1,5 @@
 const bcryptjs = require("bcryptjs");
+const Company = require("./Company.model");
 
 module.exports = (sequelize, DataTypes) => {
   const UserValue = sequelize.define(
@@ -93,6 +94,10 @@ module.exports = (sequelize, DataTypes) => {
       },
     }
   );
+
+  UserValue.associate = (models) => {
+    UserValue.hasOne(Company, { foreignKey: "companyId" });
+  };
 
   return UserValue;
 };

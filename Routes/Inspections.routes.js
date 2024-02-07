@@ -7,6 +7,15 @@ const {
   getOutBuildingByEntityId,
   updateOutBuildingsData,
   deleteOutBuildingsData,
+  getCompanyInsuranes,
+  getSingleInsurance,
+  updateInsurance,
+  getSearchInsurances,
+  updateProperty,
+  getPropertyInfo,
+  addAutomobile,
+  updateAutomobile,
+  getAutomobileInfo,
 } = require("../Controllers/Inspections.controllers");
 
 const { isAuth } = require("../utils/middleware");
@@ -14,12 +23,21 @@ const { isAuth } = require("../utils/middleware");
 const router = require("express").Router();
 
 // insurance routes
-router.post("/addInsurance", addInsurance);
-router.get("/all", addInsurance);
+router.post("/addInsurance", isAuth, addInsurance);
+router.get("/searchInsurance", isAuth, getSearchInsurances);
+router.get("/insurance/:companyId", isAuth, getCompanyInsuranes);
+router.get("/singleInsurance/:id", isAuth, getSingleInsurance);
+router.patch("/updateInsurance/:id", isAuth, updateInsurance);
 
 //Property route
-router.post("/addProperty", addProperty);
-router.patch("/:id", addProperty);
+router.post("/addProperty", isAuth, addProperty);
+router.get("/propertyInfo/:insuredId", isAuth, getPropertyInfo);
+router.patch("/updateProperty/:id", isAuth, updateProperty);
+
+// Automobile route
+router.post("/addAutomobile", isAuth, addAutomobile);
+router.get("/automobileInfo/:insuredId", isAuth, getAutomobileInfo);
+router.patch("/updateAutomobile/:id", isAuth, updateAutomobile);
 
 // hazard routes
 router.post("/addHazards", addHazards);

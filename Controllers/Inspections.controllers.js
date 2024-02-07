@@ -2,12 +2,14 @@ const db = require("../Models");
 
 const bcryptjs = require("bcryptjs");
 const randomstring = require("randomstring");
+const { removeSensitiveInfo } = require("../utils/auth");
 
 const insurance = db.insurance;
 const Hazards = db.Hazards;
 const Property = db.Property;
 const Outbuildings = db.Outbuildings;
 const Attachments = db.Attachments;
+const Automobile = db.Automobile;
 
 const addHazards = async (req, res) => {
   try {
@@ -27,16 +29,18 @@ const addHazards = async (req, res) => {
     });
   }
 };
+
+// --------------------------insurance-------------------//
 const addInsurance = async (req, res) => {
   try {
-    const newUser = await insurance.create({
+    const newInsurance = await insurance.create({
       ...req.body,
     });
 
     return res.status(200).json({
-      message: "We have sent you a verification code. Please check your email!",
+      message: "Insurance added successfully!",
       success: true,
-      newUser,
+      data: newInsurance,
     });
   } catch (error) {
     res.status(500).json({
@@ -45,16 +49,89 @@ const addInsurance = async (req, res) => {
     });
   }
 };
+
+const getCompanyInsuranes = async (req, res) => {
+  try {
+    const allInsurance = await insurance.findAll({
+      where: { companyId: req.params.companyId },
+    });
+
+    return res.status(200).json(allInsurance);
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+const getSingleInsurance = async (req, res) => {
+  try {
+    const singleInsurance = await insurance.findByPk(req.params.id);
+    return res.status(200).json(singleInsurance);
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+const updateInsurance = async (req, res) => {
+  try {
+    const Insurance = await insurance.findOne({ where: { id: req.params.id } });
+
+    if (Insurance) {
+      await Insurance.update(req.body);
+
+      const updatedInsurance = await insurance.findByPk(req.params.id);
+      return res.status(200).json({
+        success: true,
+        message: "Insurance updated successfully",
+        data: removeSensitiveInfo(updatedInsurance),
+      });
+    } else {
+      return res.status(401).json({
+        success: false,
+        message: "Update unsuccessful",
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+const getSearchInsurances = async (req, res) => {
+  try {
+    const result = await insurance.findAll({
+      where: req.query,
+    });
+    return res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+// ---------------insurance end---------------//
+
+// ----------------- property -------------------//
+
 const addProperty = async (req, res) => {
   try {
-    const newUser = await Property.create({
+    const newProperty = await Property.create({
       ...req.body,
     });
 
     return res.status(200).json({
-      message: "We have sent you a verification code. Please check your email!",
+      message: "New property created!",
       success: true,
-      newUser,
+      data: newProperty,
     });
   } catch (error) {
     res.status(500).json({
@@ -63,6 +140,117 @@ const addProperty = async (req, res) => {
     });
   }
 };
+
+const updateProperty = async (req, res) => {
+  try {
+    const property = await Property.findOne({ where: { id: req.params.id } });
+
+    if (property) {
+      await property.update(req.body);
+
+      const updatedProperty = await Property.findByPk(req.params.id);
+      return res.status(200).json({
+        success: true,
+        message: "Property updated successfully",
+        data: removeSensitiveInfo(updatedProperty),
+      });
+    } else {
+      return res.status(401).json({
+        success: false,
+        message: "Update unsuccessful",
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+const getPropertyInfo = async (req, res) => {
+  try {
+    const property = await Property.findOne({
+      where: { InsurerId: req.params.insuredId },
+    });
+
+    return res.status(200).json(property);
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+// ----------------- property end -------------------//
+
+// ------------------- automobile-------------------//
+
+const addAutomobile = async (req, res) => {
+  try {
+    const newAutomobile = await Automobile.create({
+      ...req.body,
+    });
+
+    return res.status(200).json({
+      message: "New automobile created!",
+      success: true,
+      data: newAutomobile,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+const updateAutomobile = async (req, res) => {
+  try {
+    const automobile = await Automobile.findOne({
+      where: { id: req.params.id },
+    });
+
+    if (automobile) {
+      await automobile.update(req.body);
+
+      const updatedAutomobile = await Automobile.findByPk(req.params.id);
+      return res.status(200).json({
+        success: true,
+        message: "Automobile updated successfully",
+        data: removeSensitiveInfo(updatedAutomobile),
+      });
+    } else {
+      return res.status(401).json({
+        success: false,
+        message: "Update unsuccessful",
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+const getAutomobileInfo = async (req, res) => {
+  try {
+    const automobile = await Automobile.findOne({
+      where: { InsurerId: req.params.insuredId },
+    });
+
+    return res.status(200).json(automobile);
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+// ------------------ automobile end -------------------//
 
 // ------------------------------- OutBuildings----------------------------------------//
 
@@ -373,6 +561,10 @@ module.exports = {
   //Inspection
   addInsurance,
   updateInspection,
+  getCompanyInsuranes,
+  getSingleInsurance,
+  updateInsurance,
+  getSearchInsurances,
 
   // Hazards
   addHazards,
@@ -380,7 +572,15 @@ module.exports = {
 
   // Property
   addProperty,
+  updateProperty,
+  getPropertyInfo,
 
+  // Automobile
+  addAutomobile,
+  updateAutomobile,
+  getAutomobileInfo,
+
+  // OutBuildings
   addOutbuildings,
   getOutBuildingByEntityId,
   updateOutBuildingsData,
