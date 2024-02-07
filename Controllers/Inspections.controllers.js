@@ -366,11 +366,7 @@ const getOutBuildingByEntityId = async (req, res) => {
     outbuildings.OutbuildingsList = JSON.parse(outbuildings.OutbuildingsList);
     // });
 
-    return res.status(200).json({
-      message: "Outbuildings added successfully!",
-      success: true,
-      data: outbuildings,
-    });
+    return res.status(200).json(outbuildings);
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -442,126 +438,56 @@ const deleteOutBuildingsData = async (req, res) => {
 };
 
 // ------------------------------- OutBuildings----------------------------------------//
-const addAttachments = async (req, res) => {
+
+// ----------------------------------attachments--------------------------------------//
+const addAttactment = async (req, res) => {
   try {
-    const { EntityId, image, uploadDate, uploadedBy, attachmentType } =
+    const { InsurerId, uploadDate, uploadBy, attactmentType, location } =
       req.body;
 
-    const attachments = await Outbuildings.findOne({
-      where: { EntityId: EntityId },
-    });
-
-    if (!attachments) {
-      const newAttachments = await Outbuildings.create({
-        EntityId,
-        OutbuildingsList: [
-          {
-            name,
-            length,
-            width,
-            location,
-          },
-        ],
-      });
-
-      return res.status(200).json({
-        message: "Outbuildings added successfully!",
-        data: newOutBuildings,
-        success: true,
-      });
-    }
-
-    const newOutbuildingsList = {
-      name,
-      length,
-      width,
+    const info = {
+      uploadDate,
+      uploadBy,
+      attactmentType,
       location,
     };
 
-    const data = JSON.parse(outbuildings.get().OutbuildingsList);
-    data.push(newOutbuildingsList);
-
-    outbuildings.OutbuildingsList = data;
-
-    await outbuildings.save();
-
-    return res.status(200).json({
-      message: "Outbuildings added successfully!",
-      success: true,
-      data: outbuildings,
+    const attactments = await Attachments.findOne({
+      where: { InsurerId: InsurerId },
     });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
-
-// ----------------------------------attachments--------------------------------------//
-
-// ----------------------------------attachments--------------------------------------//
-
-// update
-const updateInspection = async (req, res) => {
-  try {
-    const { ...info } = req.body;
-
-    const Insurance = await insurance.findOne({ where: { id: req.id } });
-
-    const updateInfo = image ? { image, ...info } : info;
-
-    if (user) {
-      await user.update(updateInfo);
-
-      const updatedUser = await User.findByPk(req.user.id);
-      res.status(200).json({
-        success: true,
-        message: "User Info updated successfully",
-        data: removeSensitiveInfo(updatedUser),
-      });
-    } else {
-      res.status(201).json({
-        success: false,
-        message: "Update unsuccessful",
-      });
-    }
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
-
-const updateUserInfo = async (req, res) => {
-  try {
-    const { ...info } = req.body;
-
-    const user = await User.findOne({ where: { id: req.user.id } });
 
     const image = req.file ? req.file.path : undefined;
 
-    const updateInfo = image ? { image, ...info } : info;
+    const uploadData = image ? { image, ...info } : info;
 
-    if (user) {
-      await user.update(updateInfo);
-
-      const updatedUser = await User.findByPk(req.user.id);
-      res.status(200).json({
-        success: true,
-        message: "User Info updated successfully",
-        data: removeSensitiveInfo(updatedUser),
+    if (!attactments) {
+      const newAttactments = await Attachments.create({
+        InsurerId,
+        AttachmentsList: [uploadData],
       });
-    } else {
-      res.status(201).json({
-        success: false,
-        message: "Update unsuccessful",
+
+      return res.status(200).json({
+        message: "Attactments added successfully!",
+        data: newAttactments,
+        success: true,
       });
     }
+
+    const newOutbuildingsList = uploadData;
+
+    const data = JSON.parse(attactments.get().AttachmentsList);
+    data.push(newOutbuildingsList);
+
+    attactments.AttachmentsList = data;
+
+    await attactments.save();
+
+    return res.status(200).json({
+      message: "Attactments added successfully!",
+      success: true,
+      data: attactments,
+    });
   } catch (error) {
-    console.error(error);
     res.status(500).json({
       success: false,
       message: error.message,
@@ -569,12 +495,94 @@ const updateUserInfo = async (req, res) => {
   }
 };
 
-module.exports = {
-  updateUserInfo,
+const getAttacmentByInsurerId = async (req, res) => {
+  try {
+    const attactments = await Attachments.findOne({
+      where: { InsurerId: req.params.InsurerId },
+    });
 
+    attactments.AttachmentsList = JSON.parse(attactments.AttachmentsList);
+
+    return res.status(200).json(attactments);
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+const updateAttactmentData = async (req, res) => {
+  try {
+    const { indexNum, ...info } = req.body;
+
+    const image = req.file ? req.file.path : undefined;
+
+    const uploadData = image ? { image, ...info } : info;
+
+    const attactments = await Attachments.findOne({
+      where: { InsurerId: req.params.InsurerId },
+    });
+
+    const data = JSON.parse(attactments.AttachmentsList);
+
+    const updatedData = data?.map((i, idx) => {
+      if (idx === indexNum) {
+        return { ...i, ...uploadData };
+      } else {
+        return i;
+      }
+    });
+
+    attactments.AttachmentsList = updatedData;
+    await attactments.save();
+
+    return res.status(200).json({
+      message: "Attactments updated successfully!",
+      success: true,
+      data: attactments,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+const deleteAttactmentssData = async (req, res) => {
+  try {
+    const { indexNum } = req.body;
+
+    const attactments = await Attachments.findOne({
+      where: { InsurerId: req.params.InsurerId },
+    });
+
+    const data = JSON.parse(attactments.AttachmentsList);
+
+    const updatedData = data?.filter((i, idx) => idx !== indexNum);
+
+    attactments.AttachmentsList = updatedData;
+    await attactments.save();
+
+    return res.status(200).json({
+      message: "Attactment deleted successfully!",
+      success: true,
+      data: attactments,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+// ----------------------------------attachments end--------------------------------------//
+
+module.exports = {
   //Inspection
   addInsurance,
-  updateInspection,
   getCompanyInsuranes,
   getSingleInsurance,
   updateInsurance,
@@ -600,4 +608,10 @@ module.exports = {
   getOutBuildingByEntityId,
   updateOutBuildingsData,
   deleteOutBuildingsData,
+
+  // Attactments
+  addAttactment,
+  getAttacmentByInsurerId,
+  updateAttactmentData,
+  deleteAttactmentssData,
 };

@@ -17,7 +17,12 @@ const {
   getAutomobileInfo,
   updateHazard,
   getHazardInfo,
+  addAttactment,
+  getAttacmentByInsurerId,
+  updateAttactmentData,
+  deleteAttactmentssData,
 } = require("../Controllers/Inspections.controllers");
+const { upload } = require("../config/multerConfig");
 
 const { isAuth } = require("../utils/middleware");
 
@@ -30,12 +35,12 @@ router.get("/insurance/:companyId", isAuth, getCompanyInsuranes);
 router.get("/singleInsurance/:id", isAuth, getSingleInsurance);
 router.patch("/updateInsurance/:id", isAuth, updateInsurance);
 
-//Property route
+//Property routes
 router.post("/addProperty", isAuth, addProperty);
 router.get("/propertyInfo/:insuredId", isAuth, getPropertyInfo);
 router.patch("/updateProperty/:id", isAuth, updateProperty);
 
-// Automobile route
+// Automobile routes
 router.post("/addAutomobile", isAuth, addAutomobile);
 router.get("/automobileInfo/:insuredId", isAuth, getAutomobileInfo);
 router.patch("/updateAutomobile/:id", isAuth, updateAutomobile);
@@ -54,5 +59,16 @@ router.get(
 );
 router.patch("/updateOutBuildings/:InsurerId", isAuth, updateOutBuildingsData);
 router.delete("/deleteOutBuildings/:InsurerId", isAuth, deleteOutBuildingsData);
+
+// attactments routes
+router.post("/attacment/add", isAuth, upload.single("image"), addAttactment);
+router.get("/attacmentsByEntityId/:InsurerId", isAuth, getAttacmentByInsurerId);
+router.patch(
+  "/updateAttacments/:InsurerId",
+  isAuth,
+  upload.single("image"),
+  updateAttactmentData
+);
+router.delete("/deleteAttacments/:InsurerId", isAuth, deleteAttactmentssData);
 
 module.exports = router;
