@@ -303,15 +303,15 @@ const getHazardInfo = async (req, res) => {
 
 const addOutbuildings = async (req, res) => {
   try {
-    const { EntityId, name, length, width, location } = req.body;
+    const { InsurerId, name, length, width, location } = req.body;
 
     const outbuildings = await Outbuildings.findOne({
-      where: { EntityId: EntityId },
+      where: { InsurerId: InsurerId },
     });
 
     if (!outbuildings) {
       const newOutBuildings = await Outbuildings.create({
-        EntityId,
+        InsurerId,
         OutbuildingsList: [
           {
             name,
@@ -359,7 +359,7 @@ const addOutbuildings = async (req, res) => {
 const getOutBuildingByEntityId = async (req, res) => {
   try {
     const outbuildings = await Outbuildings.findOne({
-      where: { EntityId: req.params.entityId },
+      where: { InsurerId: req.params.InsurerId },
     });
 
     // outbuildings.forEach((outbuilding) => {
@@ -384,7 +384,7 @@ const updateOutBuildingsData = async (req, res) => {
     const { indexNum, ...info } = req.body;
 
     const outbuildings = await Outbuildings.findOne({
-      where: { EntityId: req.params.entityId },
+      where: { InsurerId: req.params.InsurerId },
     });
 
     const data = JSON.parse(outbuildings.OutbuildingsList);
@@ -418,7 +418,7 @@ const deleteOutBuildingsData = async (req, res) => {
     const { indexNum } = req.body;
 
     const outbuildings = await Outbuildings.findOne({
-      where: { EntityId: req.params.entityId },
+      where: { InsurerId: req.params.InsurerId },
     });
 
     const data = JSON.parse(outbuildings.OutbuildingsList);

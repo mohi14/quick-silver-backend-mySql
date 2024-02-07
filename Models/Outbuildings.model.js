@@ -1,12 +1,8 @@
 module.exports = (sequelize, DataTypes) => {
   const OutbuildingsValue = sequelize.define("Outbuildings", {
-    EntityId: {
+    InsurerId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      references: {
-        model: "users",
-        key: "id",
-      },
     },
     OutbuildingsList: {
       type: DataTypes.JSON,

@@ -48,11 +48,11 @@ router.patch("/updateAutomobile/:id", updateHazard);
 // outbuildings routes
 router.post("/outbuilding/add", isAuth, addOutbuildings);
 router.get(
-  "/outbuildingsByEntityId/:entityId",
+  "/outbuildingsByEntityId/:InsurerId",
   isAuth,
   getOutBuildingByEntityId
 );
-router.patch("/updateOutBuildings/:entityId", isAuth, updateOutBuildingsData);
-router.delete("/deleteOutBuildings/:entityId", isAuth, deleteOutBuildingsData);
+router.patch("/updateOutBuildings/:InsurerId", isAuth, updateOutBuildingsData);
+router.delete("/deleteOutBuildings/:InsurerId", isAuth, deleteOutBuildingsData);
 
 module.exports = router;
