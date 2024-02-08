@@ -10,6 +10,7 @@ const {
   allUser,
   me,
   inviteNewUser,
+  getCompanyFieldAdjuster,
 } = require("../Controllers/User.controllers");
 const { upload } = require("../config/multerConfig");
 const { isAuth } = require("../utils/middleware");
@@ -26,6 +27,7 @@ router.post("/referUser", isAuth, inviteNewUser);
 // get and delete
 router.get("/all", allUser);
 router.get("/me", isAuth, me);
+router.get("/getFieldAduster/:id", isAuth, getCompanyFieldAdjuster);
 
 router.patch("/verifyEmail", emailVerification);
 router.patch("/updatePassword", changePassword);

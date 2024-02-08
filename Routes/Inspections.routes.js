@@ -48,7 +48,7 @@ router.patch("/updateAutomobile/:id", isAuth, updateAutomobile);
 // hazard routes
 router.post("/addHazards", addHazards);
 router.get("/hazardInfo/:insuredId", isAuth, getHazardInfo);
-router.patch("/updateAutomobile/:id", updateHazard);
+router.patch("/updateHazard/:id", isAuth, updateHazard);
 
 // outbuildings routes
 router.post("/outbuilding/add", isAuth, addOutbuildings);

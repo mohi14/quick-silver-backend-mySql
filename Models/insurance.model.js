@@ -4,13 +4,27 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    Date: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      validate: {
+        isDate: true,
+      },
+    },
     PolicyHolder: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
     },
     PolicyNumber: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       allowNull: true,
+      validate: {
+        max: 12,
+        min: 1,
+      },
     },
     InspectionType: {
       type: DataTypes.STRING,
@@ -23,10 +37,17 @@ module.exports = (sequelize, DataTypes) => {
     Insured: {
       type: DataTypes.STRING,
       allowNull: true,
+      validate: {
+        max: 45,
+        min: 1,
+      },
     },
     Email: {
       type: DataTypes.STRING,
       allowNull: true,
+      validate: {
+        isEmail: true,
+      },
     },
     CellPhone: {
       type: DataTypes.STRING,

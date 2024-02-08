@@ -421,6 +421,21 @@ const inviteNewUser = async (req, res) => {
   }
 };
 
+const getCompanyFieldAdjuster = async (req, res) => {
+  try {
+    const users = await User.findOne({
+      where: { companyId: req.params.id, userRole: "FIELD ADJUSTER" },
+    });
+    res.status(200).json(users);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 // const getAllUser = async (req, res) => {
 //   const users = await Login.findAll({});
 //   res.status(200).send(users);
@@ -440,4 +455,5 @@ module.exports = {
   inviteNewUser,
   allUser,
   me,
+  getCompanyFieldAdjuster,
 };
