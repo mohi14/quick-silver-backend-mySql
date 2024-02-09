@@ -176,11 +176,11 @@ const sendReferUserEmail = async (data) => {
   const mailOptions = {
     from: process.env.GMAIL_USER,
     to: data?.email,
-    subject: "Email Verification!!",
+    subject: "You have been invited!!",
     html: `<div>
-    <p>${data?.firstName} ${data?.lastName} Refer you!</p>
+    <p>${data?.firstName} ${data?.lastName} invite you for ${data?.role} role in ${data?.companyName} company!</p>
     <p style="margin: 0; font-size: 20px; font-weight: 400; padding: 0 0 50px 50px;  background-color: #F4F4F4;">
-                        <a href="${process.env.MAINWEBSITE_URL}/sign-up-user?role=${data?.role}&email=${data?.email}&companyId=${data?.companyId}"
+                        <a href="${process.env.MAINWEBSITE_URL}/sign-up-user/${data?.referId}"
                             style="text-decoration: none; color: white; background-color: black; padding: 10px 40px; border-radius: 50px; display: inline-block;">
                             Create account
                         </a>

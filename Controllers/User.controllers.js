@@ -12,6 +12,7 @@ const randomstring = require("randomstring");
 
 const User = db.user;
 const Company = db.Company;
+const Referal = db.Referal;
 
 const registerUser = async (req, res) => {
   try {
@@ -391,7 +392,9 @@ const referNewCompany = async (req, res) => {
 };
 const inviteNewUser = async (req, res) => {
   try {
-    const isExist = await User.findOne({ where: { email: req.body.email } });
+    const isExist = await User.findOne({
+      where: { email: req.body.referedEmail },
+    });
 
     if (isExist) {
       return res.status(401).send({
@@ -399,13 +402,18 @@ const inviteNewUser = async (req, res) => {
         success: false,
       });
     } else {
+      const newReferal = await Referal.create({
+        ...req.body,
+        referralId: req.user.id,
+      });
+
       const result = await sendReferUserEmail({
+        referId: newReferal?.id,
         firstName: req.user.firstName,
         lastName: req.user.lastName,
-        userId: req.user.id,
-        email: req.body.email,
-        role: req.body.role,
-        companyId: req.body.companyId,
+        email: req.body.referedEmail,
+        role: req.body.referedRole,
+        companyName: req.body.companyName,
       });
       return res.status(200).json({
         message: "Reffered a user successfully!",

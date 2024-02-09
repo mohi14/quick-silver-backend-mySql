@@ -22,8 +22,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true,
       validate: {
-        max: 12,
-        min: 1,
+        len: [1, 12],
       },
     },
     InspectionType: {
@@ -38,8 +37,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true,
       validate: {
-        max: 45,
-        min: 1,
+        len: [1, 45],
       },
     },
     Email: {

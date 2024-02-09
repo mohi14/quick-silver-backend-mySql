@@ -41,6 +41,7 @@ db.AddOnList = require("./AddOnList.model")(sequelize, DataTypes);
 db.ListMessage = require("./ListMessage.model")(sequelize, DataTypes);
 db.Company = require("./Company.model")(sequelize, DataTypes);
 db.Automobile = require("./Automobile.model")(sequelize, DataTypes);
+db.Referal = require("./Referral.model")(sequelize, DataTypes);
 
 db.sequelize.sync({ force: false }).then(() => {
   console.log(`Yes re-sync done!`);

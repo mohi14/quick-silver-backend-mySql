@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     DwellingFront: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
     },
     Occupied: {
       type: DataTypes.STRING,
@@ -22,20 +22,19 @@ module.exports = (sequelize, DataTypes) => {
     },
     SidingMaterial: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     Stories: {
       type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
+      allowNull: true,
     },
     SQFeet: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     MeasuredW: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     RoofMaterial: {
       type: DataTypes.STRING,
@@ -43,39 +42,39 @@ module.exports = (sequelize, DataTypes) => {
     },
     RoofLayers: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     Fencing: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     FenceMaterial: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     RoofCondition: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     EstAge: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     Outbuilding: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     Number: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     DetailedRoofAdder: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     OutbuildingAdder: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     InsurerId: {
       type: DataTypes.INTEGER,

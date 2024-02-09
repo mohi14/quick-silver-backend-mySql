@@ -1,45 +1,38 @@
 module.exports = (sequelize, DataTypes) => {
-  const CompanyValue = sequelize.define("Company", {
+  const ReferalValue = sequelize.define("Referal", {
+    referralId: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    companyId: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     companyName: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    logo: {
+    referedFirstName: {
       type: DataTypes.STRING,
       allowNull: true,
     },
-    phone: {
-      type: DataTypes.STRING,
-      allowNull: true,
-      validate: {
-        len: [1, 10],
-      },
-    },
-    currentCredits: {
+    referedLastName: {
       type: DataTypes.STRING,
       allowNull: true,
     },
-    firstAddress: {
+    referedEmail: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    referedPhoneNumber: {
       type: DataTypes.STRING,
       allowNull: true,
     },
-    lastAddress: {
+    referedRole: {
       type: DataTypes.STRING,
-      allowNull: true,
-    },
-    city: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    state: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    zipCode: {
-      type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: false,
     },
   });
 
-  return CompanyValue;
+  return ReferalValue;
 };
